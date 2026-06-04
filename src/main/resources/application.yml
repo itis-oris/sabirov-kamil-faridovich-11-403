@@ -36,8 +36,8 @@ app:
   mailgun:
     api-url: https://api.mailgun.net/v3
     api-key: ${MAILGUN_API_KEY:}
-    domain: ${MAILGUN_DOMAIN}
-    from-email: noreply@quest-platform.com
+    domain: ${MAILGUN_DOMAIN:}
+    from-email: postmaster@sandbox07e1054ed99d4930a97398695a489724.mailgun.org
 
 server:
   port: 8080

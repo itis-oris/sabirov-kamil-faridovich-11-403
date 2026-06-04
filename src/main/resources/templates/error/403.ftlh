@@ -20,20 +20,6 @@
             Если вы считаете, что это ошибка, обратитесь к администратору.
         </p>
 
-        <#if spring.security.authentication?.authenticated??>
-            <div style="margin-bottom: 2rem;">
-                <a href="${ctx}/profile" class="btn btn-outline">
-                    👤 Мой профиль
-                </a>
-            </div>
-        <#else>
-            <div style="margin-bottom: 2rem;">
-                <a href="${ctx}/auth/login" class="btn btn-primary">
-                    🔐 Войти
-                </a>
-            </div>
-        </#if>
-
         <a href="${ctx}/" class="btn btn-outline">
             🏠 На главную
         </a>

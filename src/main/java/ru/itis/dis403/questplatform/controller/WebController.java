@@ -124,4 +124,9 @@ public class WebController {
         model.addAttribute("pageTitle", "Популярные квесты");
         return "quest/popular";
     }
+
+    @GetMapping("/error/403")
+    public String accessDenied() {
+        return "error/403";
+    }
 }

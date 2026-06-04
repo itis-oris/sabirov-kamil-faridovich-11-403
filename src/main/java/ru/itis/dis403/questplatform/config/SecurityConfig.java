@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/quests", "/quests/popular",
                                 "/auth/login", "/auth/register",
-                                "/css/**", "/js/**", "/images/**", "/error",
+                                "/css/**", "/js/**", "/images/**", "/error", "/error/**",
                                 "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
                         ).permitAll()
                         .requestMatchers(
@@ -49,7 +49,7 @@ public class SecurityConfig {
                             request.getSession().setAttribute("loginMessage", "Для доступа необходимо авторизоваться");
                             response.sendRedirect(request.getContextPath() + "/auth/login");
                         })
-                        .accessDeniedPage("/auth/login?accessDenied")
+                        .accessDeniedPage("/error/403")
                 );
 
         return http.build();

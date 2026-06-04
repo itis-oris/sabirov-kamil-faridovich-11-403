@@ -42,10 +42,12 @@ public class EmailService {
                 .build();
 
         try (Response response = httpClient.newCall(request).execute()) {
+            String body = response.body() != null ? response.body().string() : "";
+
             if (!response.isSuccessful()) {
-                log.error("Failed to send email to {}: {} - {}", toEmail, response.code(), response.message());
+                log.error("Mailgun error to {}: status={}, body={}", toEmail, response.code(), body);
             } else {
-                log.info("Email sent successfully to {}", toEmail);
+                log.info("Email sent to {} | Mailgun response: {}", toEmail, body);
             }
         } catch (IOException e) {
             log.error("IO Exception while sending email to {}", toEmail, e);
