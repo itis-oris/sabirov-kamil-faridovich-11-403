@@ -2,6 +2,7 @@ package ru.itis.dis403.questplatform.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,6 +52,19 @@ public class GlobalExceptionHandler {
         model.addAttribute("status", 400);
         model.addAttribute("message", ex.getMessage());
         return "error";
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleAccessDenied(AccessDeniedException ex, Model model, HttpServletRequest request) {
+        log.warn("Доступ запрещен: {}", ex.getMessage());
+
+        model.addAttribute("ctx", request.getContextPath());
+        model.addAttribute("isAuthenticated", isAuthenticated());
+        model.addAttribute("isAdmin", isAdmin());
+        model.addAttribute("status", 403);
+        model.addAttribute("message", "У вас нет прав для доступа к этой странице");
+
+        return "error/403";
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
