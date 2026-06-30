@@ -1,0 +1,110 @@
+@host = http://localhost:8080/quest_platform
+@contentType = application/json
+
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=test@quest.local&password=Test123456
+
+> {%
+    client.test("Вход", function() {
+        client.assert(response.status === 200, "Вход выполнен");
+    });
+%}
+
+### Профиль пользователя
+# @name profile
+GET {{host}}/profile
+Accept: text/html
+
+> {%
+    client.test("Профиль", function() {
+        client.assert(response.status === 200, "Профиль доступен");
+    });
+%}
+
+### История прохождения
+# @name history
+GET {{host}}/profile/history
+Accept: text/html
+
+> {%
+    client.test("История", function() {
+        client.assert(response.status === 200, "История доступна");
+    });
+%}
+
+
+### Получить список квестов
+# @name get_all_quests
+GET {{host}}/api/quests
+Accept: {{contentType}}
+
+> {%
+    client.test("Список квестов", function() {
+        client.assert(response.status === 200, "Статус 200");
+        var body = response.body;
+        if (Array.isArray(body) && body.length > 0) {
+            client.global.set("test_quest_id", body[0].id);
+        }
+    });
+%}
+
+### Создать квест
+# @name create_quest
+POST {{host}}/api/quests
+Content-Type: {{contentType}}
+
+{
+  "title": "Тестовый Квест",
+  "description": "Описание из автотеста",
+  "difficulty": "EASY",
+  "category": "TEST"
+}
+
+> {%
+    client.test("Создание квеста", function() {
+        client.assert(response.status === 200, "Квест создан");
+        var json = response.body;
+        client.global.set("new_quest_id", json.id);
+    });
+%}
+
+### Получить квест по ID
+# @name get_quest_by_id
+GET {{host}}/api/quests/{{new_quest_id}}
+Accept: {{contentType}}
+
+> {%
+    client.test("Получение по ID", function() {
+        client.assert(response.status === 200, "Квест получен");
+    });
+%}
+
+### Завершение квеста
+# @name finish_quest
+POST {{host}}/api/play/finish
+Content-Type: {{contentType}}
+
+{
+  "questId": {{test_quest_id}},
+  "score": 85
+}
+
+> {%
+    client.test("Завершение квеста", function() {
+        client.assert(response.status === 200, "Квест завершён");
+    });
+%}
+
+### Logout
+# @name logout
+POST {{host}}/auth/logout
+Content-Type: application/x-www-form-urlencoded
+
+> {%
+    client.test("Выход", function() {
+        client.assert(response.status === 200, "Выход выполнен");
+    });
+%}

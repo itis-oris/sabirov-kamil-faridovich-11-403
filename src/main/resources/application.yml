@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: quest-platform
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quest_platform
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates
+    suffix: .ftlh
+    content-type: text/html;charset=UTF-8
+    charset: UTF-8
+    settings:
+      template_update_delay: 0
+      default_encoding: UTF-8
+
+
+app:
+  mailgun:
+    api-url: https://api.mailgun.net/v3
+    api-key: ${MAILGUN_API_KEY:}
+    domain: ${MAILGUN_DOMAIN}
+    from-email: noreply@quest-platform.com
+
+server:
+  port: 8080
+  servlet:
+    context-path: /quest_platform
+  error:
+    whitelabel:
+      enabled: false
+    path: /error
+
+logging:
+  level:
+    root: INFO
+    ru.itis.dis403.questplatform: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
